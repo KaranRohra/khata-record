@@ -1,0 +1,99 @@
+{% extends 'customer/nav_bar.html' %}
+
+{% load static %}
+
+{% block search_and_sort %}
+<form class="d-flex">
+	<div class="dropdown">
+		<a class="nav-link dropdown-toggle" href="/sort/" id="dropdown1" data-bs-toggle="dropdown" aria-expanded="false">Sort</a>
+		<ul class="dropdown-menu" aria-labelledby="dropdown1">
+			<li> 
+				<button class="dropdown-item" type="submit" name='sort' value="receiver_name">Name</button>
+			</li>
+			<li> 
+				<button class="dropdown-item" type="submit" name='sort' value="due_date DESC">Due Date</button>
+			</li>
+			<li> 
+				<button class="dropdown-item" type="submit" name='sort' value="amount DESC">Amount</button>
+			</li>
+			<li> 
+				<button class="dropdown-item" type="submit" name='sort' value="created_at DESC">Created at</button>
+			</li>
+			<li> 
+				<button class="dropdown-item" type="submit" name='sort' value="product">Product</button>
+			</li>
+		</ul>
+	</div>
+	<div class="dropdown btn-group" aria-label="Basic checkbox toggle button group">
+		<a class="nav-link dropdown-toggle" href="/filter/" id="dropdown2" data-bs-toggle="dropdown" aria-expanded="false">Filter</a>
+		<ul class="dropdown-menu" aria-labelledby="dropdown2">
+			<li>
+				<input class="form-check-input" type="checkbox" name="paid"  value="checked" id="paid"  {{last.paid}}>
+				<label class="form-check-label" for="paid">
+					Paid
+				</label>
+			</li>
+			<li>
+				<input class="form-check-input" type="checkbox" name="rejected" id="rejected" value="checked" {{last.rejected}}>
+				<label class="form-check-label" for="rejected">
+					Rejected
+				</label>
+			</li>
+			<li>
+				<input class="form-check-input" type="checkbox" name="pending" id="pending" value="checked" {{last.pending}}>
+				<label class="form-check-label" for="pending">
+					Pending
+				</label>
+			</li>
+			<li>
+				<input class="form-check-input" type="checkbox" name="expired" id="expired" value="checked" {{last.expired}}>
+				<label class="form-check-label" for="expired">
+					Expired
+				</label>
+			</li>
+		</ul>
+	</div>
+	<input class="form-control me-2" type="text" name="search" value="{{last.search}}" placeholder="Search by name" aria-label="Search">
+	<button class="btn btn-outline-success" type="submit" >Search</button>
+</form>
+{% endblock search_and_sort %}
+
+
+{% block maincontent %}
+<h5>Hello {{name}} your account balance: {{balance}} RS</h5>
+{% if bills %}
+<h3 class="text-primary text-center">Bills you have created</h3>
+<h5  class="text-success text-center">{{delete_status}}</h5>
+<div class="row row-cols-1 row-cols-md-4 g-5">
+	{% for bill in bills %}
+	<div class="col">
+		{% if bill.status == 'Pending' %}
+		<div class="card border-primary h-100" style="width: 18rem;">
+			{% include 'customer/card_view.html' %}
+		</div>
+		{% elif bill.status == 'Paid' %}
+		<div class="card border-success h-100" style="width: 18rem;">
+			{% include 'customer/card_view.html' %}
+		</div>
+		{% elif bill.status == 'Rejected' %}
+		<div class="card border-danger h-100" style="width: 18rem;">
+			{% include 'customer/card_view.html' %}
+		</div>
+		{% else %}
+		<div class="card border-dark h-100" style="width: 18rem;">
+			{% include 'customer/card_view.html' %}
+		</div>
+		{% endif%}
+	</div>
+	{% endfor %}
+</div>
+{% else %}
+<h2 class="text-primary text-center">No Bills Available</h2>
+{% endif %}
+
+{% endblock maincontent %}
+
+
+{% block scripts %}
+<script type="text/javascript" src="{% static 'customer/js/main.js' %}"></script>
+{% endblock scripts %}

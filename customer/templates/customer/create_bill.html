@@ -1,0 +1,72 @@
+{% extends 'customer/nav_bar.html' %}
+{% load static %}
+
+
+{% block title %}
+Create
+{% endblock title %}
+
+
+{% block style_links %}
+<link href="https://unpkg.com/gijgo@1.9.13/css/gijgo.min.css" rel="stylesheet" type="text/css" />
+{% endblock style_links %}
+
+
+{% block maincontent %}
+
+<form method="POST">
+	{% csrf_token %}
+	{% if error_message %}
+	<p class="text-danger" >{{error_message}}</p>
+	{% else %}
+	<p class="text-success" >{{status}}</p>
+	{% endif %}
+	<input type="hidden" name="bid" value="{{bill.id}}">
+	<div class="mb-3">
+		<label for="nameInput" class="form-label">Customer Name</label>
+		<input value="{{bill.receiver_name}}" type="text" class="form-control" id="nameInput"  name="receiver_name" placeholder="Enter Customer Name" required>
+	</div>
+
+	<div class="mb-3">
+		<label for="emailInput" class="form-label">Email Address</label>
+		<input value="{{bill.receiver_email}}" type="email" class="form-control" id="emailInput" name="receiver_email" placeholder="Enter Customer Email" required>
+	</div>
+
+	<div class="mb-3">
+		<label for="productInput" class="form-label">Product</label>
+		<input value="{{bill.product}}" type="text" class="form-control" id="productInput" name="product" placeholder="Enter Product" required>
+	</div>
+
+	<div class="mb-3">
+		<label for="amountInput" class="form-label">Amount</label>
+		<input value="{{bill.amount}}" type="number" class="form-control" min="1" id="amountInput" name="amount" placeholder="Enter Amount" required>
+	</div>
+
+	<div class="mb-3">
+		<label for="datepicker" class="form-label">Due Date</label>
+		<input value="{{bill.due_date|date:'m/d/Y'}}" id="datepicker" width="270" name="due_date" placeholder="MM/DD/YYYY" required>
+	</div>
+	
+	<a class="btn btn-secondary" role="button" href="{% url 'home' %}"> Back </a>
+
+	<button type="submit" class="btn btn-primary">Submit</button>
+
+</form>
+
+
+{% endblock maincontent %}
+
+
+{% block scripts %}
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script src="https://unpkg.com/gijgo@1.9.13/js/gijgo.min.js" type="text/javascript"></script>
+<script>
+	$('#datepicker').datepicker({
+		uiLibrary: 'bootstrap'
+	});
+</script>
+{% endblock scripts %}
+
+
+
+

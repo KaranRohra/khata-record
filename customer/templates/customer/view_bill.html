@@ -1,0 +1,91 @@
+{% extends 'customer/nav_bar.html' %}
+
+
+{% block title %} Bill Details {% endblock title %}
+
+
+{% block maincontent %}
+
+<form method="POST">
+	{% csrf_token %}
+	<h3 class="text-center text-primary">Bill Details</h3>
+	{% if bill.creator_email != email %}
+	<h4 class="text-primary">This bill is received from {{bill.creator_name}}</h4>
+	{% endif %}
+
+	{% if bill.status == 'Paid' %}
+		{% if bill.receiver_email == email %}
+			<h5 class="text-success">This bill is Paid by you</h5>
+		{% else %}
+			<h5 class="text-success">This bill is Paid by {{bill.receiver_name}}</h5>
+		{% endif %}
+	{% elif bill.status == 'Rejected' %}
+		{% if bill.receiver_email == email %}
+			<h5 class="text-danger">This bill is Rejected by you</h5>
+		{% else %}
+			<h5 class="text-danger">This bill is Rejected by {{bill.receiver_name}}</h5>
+		{% endif %}
+	{% elif bill.status == 'Expired' %}
+		<h5 class="text-dark">This bill is Expired</h5>
+	{% else %}
+		{% if bill.receiver_email == email %}
+			<h5 class="text-warning">This status of this bill is Pending</h5>
+		{% else %}
+			<h5 class="text-warning">This bill not yet paid by {{bill.receiver_name}}</h5>
+		{% endif %}
+	{% endif %}
+	<p class="text-danger">{{error_message}}</p>
+	<div class="mb-3">
+		<label for="nameInput" class="form-label">Name On Bill</label>
+		<input value="{{bill.receiver_name}}" type="text" class="form-control" id="nameInput" name="name" readonly>
+	</div>
+
+	<div class="mb-3">
+		<label for="emailInput" class="form-label">Email Address</label>
+		<input value="{{bill.receiver_email}}" type="email" class="form-control" id="emailInput" name="email" readonly>
+	</div>
+
+	<div class="mb-3">
+		<label for="productInput" class="form-label">Product</label>
+		<input value="{{bill.product}}" type="text" class="form-control" id="productInput" name="product" readonly>
+	</div>
+
+	<div class="mb-3">
+		<label for="amountInput" class="form-label">Amount</label>
+		<input value="{{bill.amount}}" type="number" class="form-control" id="amountInput" name="amount" readonly>
+	</div>
+
+	<div class="mb-3">
+		<label for="datepicker" class="form-label">Due Date</label>
+	 	<input value="{{bill.due_date}}" id="datepicker" width="270" name="due_date" readonly>
+	</div>
+	{% if bill.creator_email != email and bill.status == 'Pending' %}
+	<hr>
+	<p class="text-primary">Fill the below details to PAY or REJECT this bill</p>
+	<div class="mb-3">
+		<label for="message" class="form-label">Enter a Short Message</label>
+		<input type="text" class="form-control" id="message" name="message" placeholder="Enter a short message" required>
+	</div>
+	<div class="mb-3">
+		<label for="password" class="form-label">Enter your account password</label>
+		<input type="password" class="form-control" id="password" name="password" placeholder="Enter your account password" required>
+	</div>
+	{% else %}
+	<div class="mb-3">
+		<label for="message" class="form-label">Message from {{bill.receiver_name}}</label>
+		<input type="text" value="{{bill.message}}" class="form-control" id="message" name="message" readonly>
+	</div>
+	{% endif %}
+
+	<a class="float-end btn btn-secondary" role="button" href="{% url 'home' %}"> Home </a>
+
+	{% if bill.creator_email != email and bill.status == 'Pending' %}
+		<button type="submit" name="pay" class="btn btn-success">Pay</button>
+		<button type="submit" name="rejct" class="btn btn-danger">Reject</button>
+	{% endif %}
+	
+
+</form>
+
+
+{% endblock maincontent %}

@@ -1,0 +1,21 @@
+<div class="card-body">
+	<h5 class="card-title">{{bill.receiver_name}}</h5>
+	<h6 class="card-subtitle mb-2 text-muted">{{bill.receiver_email}}</h6>
+	<p class="card-text">Amount: {{bill.amount}}</p>
+	<p class="card-text">Product: {{bill.product}}</p>
+	<p class="card-text">Due Date: {{bill.due_date}}</p>
+	<p class="card-text">Created at: {{bill.created_at}}</p>
+	<p class="card-text">Status: {{bill.status}}</p>
+	{% if bill.status == 'Pending' %}
+	<a href="{% url 'edit-bill' bill.id %}" class="btn btn-primary" role="button">Edit</a>
+	<button onclick="alert_box('{{bill.id}}','{{bill.receiver_name}}')" class="btn btn-secondary" >Delete</button>
+	{% else %}
+		{% if bill.status == 'Paid' %}
+		<a href="{% url 'view-bill-details' bill.id %}" class="btn btn-success float-end" role="button">View</a>
+		{% elif bill.status == 'Rejected' %}
+		<a href="{% url 'view-bill-details' bill.id %}" class="btn btn-danger float-end" role="button">View</a>
+		{% else %}
+		<a href="{% url 'view-bill-details' bill.id %}" class="btn btn-dark float-end" role="button">View</a>
+		{% endif %}
+	{% endif %}
+</div>

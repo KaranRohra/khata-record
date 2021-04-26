@@ -1,0 +1,33 @@
+{% extends 'customer/nav_bar.html' %}
+
+{% block title %}Notifications{% endblock title %}
+
+
+{% block maincontent %}
+<div class="table-responsive">
+	{% if status %}
+	<h2 class="text-center text-primary">{{status}}</h2>
+	{% else %}
+	<table class="table table-bordered border-dark">
+		<thead class="table-dark">
+			<tr> 
+				<td> # </td>
+				<td> From  </td>
+				<td> At </td>
+			</tr>
+		</thead>
+		<tbody>
+			
+			{% for notification in notifications %}
+				<tr class="text-primary">
+					<td> {{notification.0}} </td>
+					<td> <a class="text-primary" href="{% url 'view-bill-details' notification.1.bill_id %}"> {{notification.1.from_email}} </a></td>
+					<td>{{notification.1.created_at}}</td>
+				</tr>
+			{% endfor %}
+
+		</tbody>
+	</table>
+	{% endif %}
+</div>
+{% endblock maincontent %}

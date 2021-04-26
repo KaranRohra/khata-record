@@ -1,0 +1,65 @@
+{% extends 'customer/nav_bar.html' %}
+
+{% block title %}Received Bills {% endblock title%}
+
+
+{% block style_links %}
+{{block.super}}
+<style>
+	.text-white{
+		text-decoration: none;
+	}
+	.text-white:hover{
+		text-decoration: underline;
+	}
+</style>
+{% endblock style_links %}
+
+
+{% block maincontent %}
+<div class="table-responsive">
+	{% if status %}
+	<h2 class="text-center text-primary">{{status}}</h2>
+	{% else %}
+	<table class="table table-bordered border-dark">
+		<thead class="table-dark">
+			<tr> 
+				<td> # </td>
+				<td> From </td>
+				<td> At </td>
+			</tr>
+		</thead>
+		<tbody>
+			{% for bill in bills %}
+				{% if bill.1.status == 'Pending' %}
+					<tr class="text-primary">
+						<td> {{bill.0}} </td>
+						<td> <a class="text-primary" href="{% url 'view-bill-details' bill.1.id %}"> {{bill.1.creator_email}} </a></td>
+						<td>{{bill.1.created_at}}</td>
+					</tr>
+				{% elif bill.1.status == 'Paid' %}
+					<tr class="text-success">
+						<td> {{bill.0}} </td>
+						<td> <a class="text-success" href="{% url 'view-bill-details' bill.1.id %}"> {{bill.1.creator_email}} </a></td>
+						<td>{{bill.1.created_at}}</td>
+					</tr>
+				{% elif bill.1.status == 'Rejected' %}
+					<tr class="text-danger">
+						<td> {{bill.0}} </td>
+						<td> <a class="text-danger" href="{% url 'view-bill-details' bill.1.id %}"> {{bill.1.creator_email}} </a></td>
+						<td>{{bill.1.created_at}}</td>
+					</tr>
+				{% else %}
+					<tr class="text-dark">
+						<td> {{bill.0}} </td>
+						<td> <a class="text-dark" href="{% url 'view-bill-details' bill.1.id %}"> {{bill.1.creator_email}} </a></td>
+						<td>{{bill.1.created_at}}</td>
+					</tr>
+				{% endif %}
+			{% endfor %}
+
+		</tbody>
+	</table>
+	{% endif %}
+</div>
+{% endblock maincontent %}

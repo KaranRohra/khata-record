@@ -1,0 +1,57 @@
+{% extends 'customer/nav_bar.html' %}
+
+{% block title %}Profile{% endblock title %}
+
+
+{% block maincontent %}
+<form method="POST">
+	{% csrf_token %}
+	{% if error_message %}
+	<p class="text-danger" >{{error_message}}</p>
+	{% else %}
+	<p class="text-success" >{{status}}</p>
+	{% endif %}
+
+	<div class="mb-3">
+		<label for="email" class="form-label">Email Address</label>
+		<input value="{{customer.email}}" type="email" class="form-control" id="email" readonly>
+	</div>
+
+
+	<div class="mb-3">
+		<label for="emailInput" class="form-label">Your Account Balance</label>
+		<input value="{{customer.balance}}" type="number" class="form-control" id="emailInput"  readonly>
+	</div>
+
+	<div class="mb-3">
+		<label for="nameInput" class="form-label">Name</label>
+		<input value="{{customer.name}}" type="text" class="form-control" id="nameInput"  name="name" placeholder="Enter Your Name" required>
+	</div>
+
+	<hr>
+	<p class="text-primary">If you want to change your account password fill below details </p>
+	<div class="mb-3">
+		<label for="password1" class="form-label">Old Password</label>
+		<input type="password" class="form-control" id="password1" name="password" placeholder="Enter old password">
+	</div>
+
+	<div class="mb-3">
+		<label for="password2" class="form-label">New Password</label>
+		<input  type="password" class="form-control" id="password2" name="new_password" placeholder="Enter new password">
+	</div>
+
+	<div class="mb-3">
+		<label for="password3" class="form-label">Confirm New Password</label>
+		<input type="password" class="form-control" id="password3" name="confirm_password" placeholder="Enter confirm new password" >
+	</div>
+
+
+
+	<a class="btn btn-secondary" role="button" href="{% url 'home' %}"> Back </a>
+
+	<button type="submit" class="btn btn-primary">Submit</button>
+
+</form>
+
+
+{% endblock maincontent %}
